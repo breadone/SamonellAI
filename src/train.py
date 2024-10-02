@@ -7,16 +7,13 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
 import pathlib
+batch_size = 32
+img_height = 480
+img_width = 480
 
-global img_height
-global img_width
 
-def train(plot=False):
-    batch_size = 32
-    img_height = 640
-    img_width = 640
-
-    data_dir = pathlib.Path('../train').with_suffix('')
+def load_ds(path):
+    data_dir = pathlib.Path(path).with_suffix('')
 
     # split into training and validation set with a 20% split
     train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -26,7 +23,7 @@ def train(plot=False):
             seed=0,
             image_size=(img_height, img_width),
             batch_size=batch_size
-        )
+    )
 
     val_ds = tf.keras.utils.image_dataset_from_directory(
             data_dir,
@@ -35,7 +32,12 @@ def train(plot=False):
             seed=123,
             image_size=(img_height, img_width),
             batch_size=batch_size
-        )
+    )
+
+    return train_ds, val_ds
+
+def train(plot=False):
+    train_ds, val_ds = load_ds('train')
     
     class_names = train_ds.class_names
     num_classes = len(class_names)
@@ -44,8 +46,8 @@ def train(plot=False):
     img_norm = layers.Rescaling(1./2)
 
     model = Sequential([
-        layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
         # img_norm,
+        layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
@@ -80,7 +82,7 @@ def train(plot=False):
         plt.title('Training and Validation Accuracy')
         plt.show()
 
-    return model, class_names
+    return model
 
 if __name__ == '__main__':
     train()
