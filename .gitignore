@@ -1,0 +1,4 @@
+train/
+frames/
+**/.DS_Store
+.venv
