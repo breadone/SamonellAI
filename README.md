@@ -19,9 +19,11 @@ This is obviously quite CPU and network intensive, and will take some time. In m
 Also note that the yt-dlp output format seems to vary between .webm and .mp4, if an error occurs about no such file, just change all mentions of .webm in `setup.sh` to .mp4 or vice versa. it seems that on macos it outputs .mp4 and on linux it outputs .webm,,, ¯\\_(ツ)_/¯
 
 ### Running
+install the dependancies by running `pip install -r requirements.txt`
+
 open `src/main.py` and edit the path for the image you want to predict. 
 
-from the `src` directory, run `python3 main.py`. This will create and train the model based on the input images.
+run `python3 src/main.py`. This will create and train the model based on the input images.
 
 Training is extremely resource intensive for your system, it will take some time. If you have an Nvidia GPU (and the necessary drivers), it will utilise the CUDA framework to MASSIVELY speed up this process. 
 

@@ -1,14 +1,25 @@
 import numpy as np
 import tensorflow as tf
+import os
 
-from train import train
+from train import train, load_ds
 
 # the image to predict on, change this!
 pred_image = '/home/juniper/dev/samonellai/test/2024-10-02_16-40.png'
-model, names = train()
+
+# check if model exists on disk, load that if so
+if os.path.exists('model.keras'):
+    model = tf.keras.models.load_model('model.keras')
+    print('loaded existing model.keras')
+else:
+    model = train()
+    model.save('model.keras')
+    print('saved model to model.keras')
+
+names = load_ds('train')[0].class_names
 
 # load image and create a batch for prediction
-img = tf.keras.utils.load_img(pred_image, target_size=(640, 640))
+img = tf.keras.utils.load_img(pred_image, target_size=(480, 480))
 img_array = tf.keras.utils.img_to_array(img)
 img_array = tf.expand_dims(img_array, 0) 
 
