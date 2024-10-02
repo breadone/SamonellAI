@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import PIL
 import tensorflow as tf
 
 from tensorflow import keras
@@ -9,10 +8,13 @@ from tensorflow.keras.models import Sequential
 
 import pathlib
 
-def train():
+global img_height
+global img_width
+
+def train(plot=False):
     batch_size = 32
-    img_height = 480
-    img_width = 480
+    img_height = 640
+    img_width = 640
 
     data_dir = pathlib.Path('../train').with_suffix('')
 
@@ -43,6 +45,7 @@ def train():
 
     model = Sequential([
         layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+        # img_norm,
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
@@ -61,7 +64,6 @@ def train():
     
     model.summary()
 
-
     epochs=10
     history = model.fit( train_ds, validation_data=val_ds, epochs=epochs )
 
@@ -70,14 +72,15 @@ def train():
 
     epochs_range = range(epochs)
 
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title('Training and Validation Accuracy')
+    if plot:
+        plt.figure(figsize=(8, 8))
+        plt.plot(epochs_range, acc, label='Training Accuracy')
+        plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+        plt.legend(loc='lower right')
+        plt.title('Training and Validation Accuracy')
+        plt.show()
 
-
+    return model, class_names
 
 if __name__ == '__main__':
     train()
