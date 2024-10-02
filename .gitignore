@@ -1,4 +1,6 @@
 train/
-frames/
+test/
 **/.DS_Store
 .venv
+**/__pycache__
+*.keras
