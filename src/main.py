@@ -5,7 +5,7 @@ import os
 from train import train, load_ds
 
 # the image to predict on, change this!
-pred_image = '/home/juniper/dev/samonellai/test/2024-10-02_16-40.png'
+pred_image = '/home/juniper/dev/samonellai/test/2024-10-02_17-17.png'
 
 # check if model exists on disk, load that if so
 if os.path.exists('model.keras'):
@@ -28,4 +28,4 @@ score = tf.nn.softmax(predictions[0])
 
 predicted_name = names[np.argmax(score)]
 
-print( f"This image most likely is from \"{predicted_name}\" with a {np.max(score):.2f}% confidence." )
+print( f"This image most likely is from \"{predicted_name}\" with a {100*np.max(score):.2f}% confidence." )

@@ -20,7 +20,7 @@ def load_ds(path):
             data_dir,
             validation_split=0.2,
             subset="training",
-            seed=0,
+            seed=123,
             image_size=(img_height, img_width),
             batch_size=batch_size
     )
@@ -42,11 +42,7 @@ def train(plot=False):
     class_names = train_ds.class_names
     num_classes = len(class_names)
 
-    # normalise image by reducing colour depth by half
-    img_norm = layers.Rescaling(1./2)
-
     model = Sequential([
-        # img_norm,
         layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -85,4 +81,6 @@ def train(plot=False):
     return model
 
 if __name__ == '__main__':
-    train()
+    model = train(plot=True)
+    model.summary()
+    
